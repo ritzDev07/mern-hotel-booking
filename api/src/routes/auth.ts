@@ -3,11 +3,12 @@ import { check, validationResult } from "express-validator";
 import User from "../models/user";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import verifyToken from "../middleware/auth";
 
 
 const router = express.Router();
 
-
+// Login route with email and password validation
 router.post("/login",
     [
         check("email", "Email is required").isEmail(),
@@ -61,5 +62,10 @@ router.post("/login",
 
     }
 );
+
+// Token validation route
+router.get("/validate-token", verifyToken, (req: Request, res: Response) =>{
+    res.status(200).send({userId: req.userId})
+});
 
 export default router;

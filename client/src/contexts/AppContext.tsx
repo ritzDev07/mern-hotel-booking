@@ -27,7 +27,7 @@ export const AppContextProvider = ({ children }: { children: React.ReactNode }) 
     const { isError } = useQuery("validateToken", apiClient.validateToken, {
         retry: false,
     });
-    
+
 
     // Provide a default value for the context with showToast function
     return (

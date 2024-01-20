@@ -24,8 +24,8 @@ export const register = async (formData: RegisterFromData) => {
 
 // Function to handle user sign-in
 export const signIn = async (formData: SignInFormData) => {
-    
-     // Make a POST request to the authentication login endpoint
+
+    // Make a POST request to the authentication login endpoint
     const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
         credentials: "include",
@@ -55,4 +55,16 @@ export const validateToken = async () => {
     }
 
     return response.json();
+};
+
+//Function to perform user sign-out by making a POST request to the logout API endpoint.
+export const signOut = async () => {
+    const response = await fetch(`${API_BASE_URL}/api/auth/logout`, {
+        method: "POST",
+        credentials: "include",
+    });
+
+    if (!response.ok) {
+        throw new Error("Error during sign out!");
+    }
 };

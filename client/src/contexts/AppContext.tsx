@@ -5,7 +5,7 @@ import * as apiClient from "../api-client";
 
 // Define the structure of a toast message
 type ToastMessage = {
-    messages: string;
+    message: string;
     type: "SUCCESS" | "ERROR";
 };
 
@@ -42,7 +42,7 @@ export const AppContextProvider = ({ children }: { children: React.ReactNode }) 
 
             {toast && (
                 <Toast
-                    message={toast.messages}
+                    message={toast.message}
                     type={toast.type}
                     onClose={() => setToast(undefined)}
                 />

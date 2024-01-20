@@ -10,10 +10,10 @@ const SignOutButton = () => {
     const mutation = useMutation(apiClient.signOut, {
         onSuccess: async () => {
             await queryClient.invalidateQueries("validateToken");
-            showToast({ messages: "Signed Out!", type: "SUCCESS" });
+            showToast({ message: "Signed Out!", type: "SUCCESS" });
         },
         onError: (error: Error) => {
-            showToast({ messages: error.message, type: "ERROR" })
+            showToast({ message: error.message, type: "ERROR" })
         },
     });
 

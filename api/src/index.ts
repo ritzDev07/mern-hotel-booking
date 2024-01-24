@@ -4,8 +4,23 @@ import "dotenv/config";
 import mongoose from "mongoose";
 import userRoutes from "./routes/users";
 import authRoutes from "./routes/auth";
-import cookieParser from "cookie-parser"
+import cookieParser from "cookie-parser";
 import path from "path";
+import { v2 as cloudinary } from "cloudinary";
+
+// CLOUDINARY CONNECTIONS
+const cloudinaryConfig = {
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME ,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+};
+
+try {
+    cloudinary.config(cloudinaryConfig);
+    console.log('Cloudinary connected');
+} catch (error) {
+    console.error(error);
+}
 
 // Connect to MongoDB using the provided connection string
 mongoose

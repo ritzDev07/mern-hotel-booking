@@ -113,6 +113,7 @@ export const fetchMyHotelById = async (hotelId: string): Promise<HotelType> => {
     return response.json();
 };
 
+// Function to update a hotel by its ID
 export const updateMyHotelById = async (hotelFormData: FormData) => {
     const response = await fetch(
         `${API_BASE_URL}/api/my-hotels/${hotelFormData.get("hotelId")}`,

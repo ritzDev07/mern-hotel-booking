@@ -54,6 +54,11 @@ app.use("/api/auth", authRoutes) // For login user
 app.use("/api/users", userRoutes) // Use userRoutes for handling routes under "/api/users"
 app.use("/api/my-hotels", myHotelRoutes) //my-hotels routes
 
+// This route handles any incoming requests that don't match other defined routes
+app.get("*", (req: Request, res: Response)=>{
+    res.sendFile(path.join(__dirname,"../../client/dist/index.html"))
+})
+
 app.listen(3100, () => {
     console.log("Server running on localhost:3100");
 });

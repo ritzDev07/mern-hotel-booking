@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser";
 import path from "path";
 import { v2 as cloudinary } from "cloudinary";
 import myHotelRoutes from "./routes/my-hotels";
+import hotelRoutes from "./routes/hotels";
 
 // CLOUDINARY CONNECTIONS
 const cloudinaryConfig = {
@@ -50,14 +51,15 @@ app.use(
 app.use(express.static(path.join(__dirname, "../../client/dist")));
 
 //Handling routes
-app.use("/api/auth", authRoutes) // For login user
-app.use("/api/users", userRoutes) // Use userRoutes for handling routes under "/api/users"
-app.use("/api/my-hotels", myHotelRoutes) //my-hotels routes
+app.use("/api/auth", authRoutes); // For login user
+app.use("/api/users", userRoutes); // Use userRoutes for handling routes under "/api/users"
+app.use("/api/my-hotels", myHotelRoutes); //my-hotels routes
+app.use("/api/hotels", hotelRoutes); // Search routes
 
 // This route handles any incoming requests that don't match other defined routes
 app.get("*", (req: Request, res: Response)=>{
     res.sendFile(path.join(__dirname,"../../client/dist/index.html"))
-})
+});
 
 app.listen(3100, () => {
     console.log("Server running on localhost:3100");

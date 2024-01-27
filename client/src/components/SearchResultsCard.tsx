@@ -45,14 +45,14 @@ const SearchResultsCard = ({ hotel }: Props) => {
 
                 <div className="grid grid-cols-2 items-end whitespace-nowrap">
                     <div className="flex gap-1 items-center">
-                        {hotel.facilities.slice(0, 3).map((facility, index) => (
+                        {hotel.facilities.slice(0, 2).map((facility, index) => (
                             <span key={index} className="bg-slate-300 hover:bg-green-500 p-1 rounded-lg text-xs whitespace-nowrap">
                                 {facility}
                             </span>
                         ))}
-                        {hotel.facilities.length > 3 && (
+                        {hotel.facilities.length > 2 && (
                             <span className="text-xs">
-                                +{hotel.facilities.length - 3} more
+                                +{hotel.facilities.length - 2} more
                             </span>
                         )}
                     </div>

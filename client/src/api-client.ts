@@ -131,6 +131,8 @@ export const updateMyHotelById = async (hotelFormData: FormData) => {
     return response.json();
 };
 
+
+
 // Define a type for search parameters
 export type SearchParams = {
     destination?: string;
@@ -178,3 +180,14 @@ export const searchHotels = async (searchParams: SearchParams): Promise<HotelSea
 
     return response.json();
 };
+
+//Fetches a hotel by its ID from the server.
+export const fetchHotelById = async (hotelId: string): Promise<HotelType> => {
+    const response = await fetch(`${API_BASE_URL}/api/hotels/${hotelId}`);
+    
+    if (!response.ok) {
+      throw new Error("Error fetching Hotels");
+    }
+  
+    return response.json();
+  };

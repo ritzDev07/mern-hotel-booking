@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import * as apiClient from "../api-client";
 import { useAppContext } from "../contexts/AppContext";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 
 export type SignInFormData = {
@@ -16,6 +16,8 @@ const SignIn = () => {
     const { showToast } = useAppContext();
     const navigate = useNavigate();
 
+    const location = useLocation();
+
     const { register,
         formState: { errors },
         handleSubmit,
@@ -27,7 +29,7 @@ const SignIn = () => {
 
             // Invalidate the "validateToken" query in the React Query cache, triggering a refetch
             await queryClient.invalidateQueries("validateToken");
-            navigate("/");
+            navigate(location.state?.from?.pathname || "/");
         },
         onError: (error: Error) => {
             showToast({ message: error.message, type: "ERROR" });

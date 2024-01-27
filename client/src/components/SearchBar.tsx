@@ -3,8 +3,10 @@ import { useSearchContext } from "../contexts/SearchContext";
 import { MdTravelExplore } from "react-icons/md";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useNavigate } from "react-router-dom";
 
 const SearchBar = () => {
+    const navigate = useNavigate();
     const search = useSearchContext();
 
     const [destination, setDestination] = useState<string>(search.destination);
@@ -21,8 +23,10 @@ const SearchBar = () => {
             checkOut,
             adultCount,
             childCount
-        )
-    }
+        );
+
+        navigate("/search");
+    };
 
     const minDate = new Date();
     const maxDate = new Date();
@@ -31,7 +35,7 @@ const SearchBar = () => {
 
         <form
             onSubmit={handleSubmit}
-            className="text-sm -mt-8 p-4 bg-amber-400 rounded-sm shadow-md grid lg:grid-cols-5 2xl:grid-cols-5 items-center gap-1"
+            className="text-sm -mt-8 p-4 bg-amber-400 rounded-sm shadow-md grid lg:grid-cols-4 2xl:grid-cols-4 items-center gap-1"
         >
             <div className="flex flex-row items-center flex-1 bg-white p-2">
                 <MdTravelExplore size={18} className="mr-2" />
@@ -43,7 +47,7 @@ const SearchBar = () => {
                 />
             </div>
 
-            <div className="flex bg-white px-2 py-1 gap-2">
+            <div className="flex min-w-full bg-white px-2 py-1 gap-2">
                 <label className="items-center flex">
                     Adults:
                     <input
@@ -58,7 +62,7 @@ const SearchBar = () => {
                 <label className="items-center flex">
                     Children:
                     <input
-                        className="w-full  p-1 focus:outline-none font-bold"
+                        className="w-full p-1 focus:outline-none font-bold"
                         type="number"
                         min={0}
                         max={20}
@@ -68,34 +72,37 @@ const SearchBar = () => {
                 </label>
             </div>
 
-            <div>
-                <DatePicker
-                    selected={checkIn}
-                    onChange={(date) => setCheckIn(date as Date)}
-                    selectsStart
-                    startDate={checkIn}
-                    endDate={checkOut}
-                    minDate={minDate}
-                    maxDate={maxDate}
-                    placeholderText="Check-in Date"
-                    className="min-w-full bg-white p-2 focus:outline-none"
-                    wrapperClassName="min-w-full"
-                />
-            </div>
+            <div className="flex flex-col md:flex-row gap-1">
+                <div className="md:w-1/2">
+                    <DatePicker
+                        selected={checkIn}
+                        onChange={(date) => setCheckIn(date as Date)}
+                        selectsStart
+                        startDate={checkIn}
+                        endDate={checkOut}
+                        minDate={minDate}
+                        maxDate={maxDate}
+                        placeholderText="Check-in Date"
+                        className="w-full bg-white p-2 focus:outline-none"
+                        wrapperClassName="w-full"
+                    />
+                </div>
 
-            <div>
-                <DatePicker
-                    selected={checkOut}
-                    onChange={(date) => setCheckOut(date as Date)}
-                    selectsStart
-                    startDate={checkIn}
-                    endDate={checkOut}
-                    minDate={minDate}
-                    maxDate={maxDate}
-                    placeholderText="Check-out Date"
-                    className="min-w-full bg-white p-2 focus:outline-none"
-                    wrapperClassName="min-w-full"
-                />
+                <div className="md:w-1/2">
+                    <DatePicker
+                        selected={checkOut}
+                        onChange={(date) => setCheckOut(date as Date)}
+                        selectsStart
+                        startDate={checkIn}
+                        endDate={checkOut}
+                        minDate={minDate}
+                        maxDate={maxDate}
+                        placeholderText="Check-out Date"
+                        className="w-full bg-white p-2 focus:outline-none"
+                        wrapperClassName="w-full"
+                    />
+                </div>
+                
             </div>
 
             <div className="flex gap-1">

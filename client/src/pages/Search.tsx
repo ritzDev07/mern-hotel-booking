@@ -4,6 +4,10 @@ import * as apiClient from "../api-client";
 import { useState } from "react";
 import SearchResultsCard from "../components/SearchResultsCard";
 import Pagination from "../components/Pagination";
+import StarRatingFilter from "../components/filters/StarRatingFilter";
+import HotelTypesFilter from "../components/filters/HotelTypesFilter";
+import FacilitiesFilter from "../components/filters/FacilitiesFilter";
+import PriceFilter from "../components/filters/PriceFilter";
 
 
 const Search = () => {
@@ -12,6 +16,11 @@ const Search = () => {
     const [page, setPage] = useState<number>(1);
     const [sortOption, setSortOption] = useState<string>("");
 
+    const [selectedStars, setSelectedStars] = useState<string[]>([]);
+    const [selectedHotelTypes, setSelectedHotelTypes] = useState<string[]>([]);
+    const [selectedFacilities, setSelectedFacilities] = useState<string[]>([]);
+    const [selectedPrice, setSelectedPrice] = useState<number | undefined>();
+
     const searchParams = {
         destination: search.destination,
         checkIn: search.checkIn.toISOString(),
@@ -19,27 +28,86 @@ const Search = () => {
         adultCount: search.adultCount.toString(),
         childCount: search.childCount.toString(),
         page: page.toString(),
+        stars: selectedStars,
+        types: selectedHotelTypes,
+        facilities: selectedFacilities,
+        maxPrice: selectedPrice?.toString(),
+        sortOption,
     };
 
     const { data: hotelData } = useQuery(["searchHotels", searchParams], () => apiClient.searchHotels(searchParams));
 
+    const handleStarsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const starRating = event.target.value;
+
+        setSelectedStars((prevStars) =>
+            event.target.checked
+                ? [...prevStars, starRating]
+                : prevStars.filter((star) => star !== starRating)
+        );
+    };
+
+    const handleHotelTypeChange = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        const hotelType = event.target.value;
+
+        setSelectedHotelTypes((prevHotelTypes) =>
+            event.target.checked
+                ? [...prevHotelTypes, hotelType]
+                : prevHotelTypes.filter((hotel) => hotel !== hotelType)
+        );
+    };
+
+    const handleFacilityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const facility = event.target.value;
+
+        setSelectedFacilities((prevFacilities) =>
+            event.target.checked
+                ? [...prevFacilities, facility]
+                : prevFacilities.filter((prevFacility) => prevFacility !== facility)
+        );
+    };
+
     return (
         <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-5">
-            <div className="rounded-lg border border-slate-300 p-5 h-fit sticky top-10">
+            <div className="rounded-lg border border-slate-300 p-5 h-fit top-10">
+                
+                {/* Filter section */}
                 <div className="space-y-5">
                     <h3 className="text-lg font-semibold border-b border-slate-300 pb-5">
                         Filter by:
                     </h3>
+                    <StarRatingFilter
+                        selectedStars={selectedStars}
+                        onChange={handleStarsChange}
+                    />
+                    <HotelTypesFilter
+                        selectedHotelTypes={selectedHotelTypes}
+                        onChange={handleHotelTypeChange}
+                    />
+                    <FacilitiesFilter
+                        selectedFacilities={selectedFacilities}
+                        onChange={handleFacilityChange}
+                    />
+                    <PriceFilter
+                        selectedPrice={selectedPrice}
+                        onChange={(value?: number) => setSelectedPrice(value)}
+                    />
 
                 </div>
             </div>
             <div className="flex flex-col gap-5">
 
                 <div className="flex justify-between items-center">
+
+                    {/* Display the total number of hotels found */}
                     <span className="text-xl font-bold">
                         {hotelData?.pagination.total} Hotels found
                         {search.destination ? ` in ${search.destination}` : ""}
                     </span>
+
+                    {/* Dropdown for sorting options */}
                     <select
                         value={sortOption}
                         onChange={(event) => setSortOption(event.target.value)}
@@ -56,12 +124,14 @@ const Search = () => {
                     </select>
                 </div>
 
+                {/* Main content section */}
                 <div>
                     {hotelData?.data.map((hotel) => (
-                        <SearchResultsCard hotel={hotel} />
+                        <SearchResultsCard key={hotel._id} hotel={hotel} />
                     ))}
                 </div>
 
+                {/* Pagination section */}
                 <div>
                     <Pagination
                         page={hotelData?.pagination.page || 1}

@@ -73,7 +73,7 @@ const SearchBar = () => {
             </div>
 
             <div className="flex flex-col md:flex-row gap-1">
-                <div className="md:w-1/2">
+                <div key="checkIn" className="md:w-1/2">
                     <DatePicker
                         selected={checkIn}
                         onChange={(date) => setCheckIn(date as Date)}
@@ -88,7 +88,7 @@ const SearchBar = () => {
                     />
                 </div>
 
-                <div className="md:w-1/2">
+                <div key="checkOut" className="md:w-1/2">
                     <DatePicker
                         selected={checkOut}
                         onChange={(date) => setCheckOut(date as Date)}
@@ -102,7 +102,7 @@ const SearchBar = () => {
                         wrapperClassName="w-full"
                     />
                 </div>
-                
+
             </div>
 
             <div className="flex gap-1">

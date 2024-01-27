@@ -15,6 +15,7 @@ const SearchResultsCard = ({ hotel }: Props) => {
                 />
             </div>
             <div className="grid grid-rows-[.8fr_1fr_1fr]">
+
                 <div>
                     <div className="flex items-center">
                         <span className="flex">
@@ -45,15 +46,17 @@ const SearchResultsCard = ({ hotel }: Props) => {
                 <div className="grid grid-cols-2 items-end whitespace-nowrap">
                     <div className="flex gap-1 items-center">
                         {hotel.facilities.slice(0, 3).map((facility, index) => (
-                            <span key={index} className="bg-slate-300 hover:bg-green-500 p-2 rounded-lg font-bold text-xs whitespace-nowrap">
+                            <span key={index} className="bg-slate-300 hover:bg-green-500 p-1 rounded-lg text-xs whitespace-nowrap">
                                 {facility}
                             </span>
                         ))}
-                        <span className="text-sm">
-                            {hotel.facilities.length > 3 &&
-                                `+${hotel.facilities.length - 3} more`}
-                        </span>
+                        {hotel.facilities.length > 3 && (
+                            <span className="text-xs">
+                                +{hotel.facilities.length - 3} more
+                            </span>
+                        )}
                     </div>
+
                     <div className="flex flex-col items-end gap-1">
                         <span className="font-semibold p-1">${hotel.pricePerNight} per night</span>
                         <Link

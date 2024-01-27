@@ -1,9 +1,24 @@
 import { RegisterFromData } from "./pages/Register";
 import { SignInFormData } from "./pages/SignIn";
-import { HotelSearchResponse, HotelType } from "../../api/src/shared/types";
+import { HotelSearchResponse, HotelType, UserType } from "../../api/src/shared/types";
 
 // Define API base URL using environment variables or default value
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
+
+// Function to fetch information about the current authenticated user from the server
+export const fetchCurrentUser = async (): Promise<UserType> => {
+    // Send a request to the "/me" endpoint to retrieve user information
+    const response = await fetch(`${API_BASE_URL}/api/users/me`, {
+        credentials: "include",
+    });
+   
+    if (!response.ok) {
+        throw new Error("Error fetching user");
+    }
+    
+    return response.json();
+};
+
 
 // Function to register a new user
 export const register = async (formData: RegisterFromData) => {

@@ -2,6 +2,10 @@ import express, { Request, Response } from "express";
 import Hotel from "../models/hotel";
 import { HotelSearchResponse } from "../shared/types";
 import { param, validationResult } from "express-validator";
+import Stripe from "stripe";
+import verifyToken from "../middleware/auth";
+
+const stripe = new Stripe(process.env.STRIPE_API_KEY as string);
 
 const router = express.Router();
 
@@ -85,6 +89,52 @@ router.get(
             console.log(error);
             res.status(500).json({ message: "Error fetching hotel" });
         }
+    }
+);
+
+// Route to create payment intent for booking a hotel
+router.post(
+    "/:hotelId/bookings/payment-intent",
+    verifyToken, // Middleware to verify user authentication token
+    async (req: Request, res: Response) => {
+        // Extracting necessary data from request body and parameters
+        const { numberOfNights } = req.body;
+        const hotelId = req.params.hotelId;
+
+        // Finding the hotel by ID
+        const hotel = await Hotel.findById(hotelId);
+        // If hotel not found, return error response
+        if (!hotel) {
+            return res.status(400).json({ message: "Hotel not found" });
+        }
+
+        // Calculating total cost for the booking
+        const totalCost = hotel.pricePerNight * numberOfNights;
+
+        // Creating payment intent using Stripe API
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: totalCost * 100, // Converting amount to cents as per Stripe requirement
+            currency: "usd", // Setting currency to USD
+            metadata: {
+                hotelId,
+                userId: req.userId, // Storing user ID in metadata
+            },
+        });
+
+        // If payment intent creation fails, return error response
+        if (!paymentIntent.client_secret) {
+            return res.status(500).json({ message: "Error creating payment intent" });
+        }
+
+        // Constructing response object with payment intent details
+        const response = {
+            paymentIntentId: paymentIntent.id,
+            clientSecret: paymentIntent.client_secret.toString(),
+            totalCost,
+        };
+
+        
+        res.send(response);
     }
 );
 

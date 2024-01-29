@@ -5,9 +5,13 @@ import { useSearchContext } from "../contexts/SearchContext";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import BookingDetailsSummary from "../components/BookingDetailsSummary";
+import { useAppContext } from "../contexts/AppContext";
+import { Elements } from "@stripe/react-stripe-js";
 
 // Defining Booking functional component
 const Booking = () => {
+
+    const { stripePromise } = useAppContext();
 
     // Retrieving search context and hotelId from route parameters
     const search = useSearchContext();
@@ -24,6 +28,20 @@ const Booking = () => {
             setNumberOfNights(Math.ceil(nights));
         }
     }, [search.checkIn, search.checkOut]);
+
+    // Query to create payment intent using API client function
+    const { data: paymentIntentData } = useQuery(
+        "createPaymentIntent",
+        () =>
+            apiClient.createPaymentIntent(
+                hotelId as string,
+                numberOfNights.toString()
+            ),
+        {
+            enabled: !!hotelId && numberOfNights > 0,
+        }
+    );
+
 
     const { data: hotel } = useQuery("fetchHotelByID", () =>
         apiClient.fetchHotelById(hotelId as string), {
@@ -51,11 +69,21 @@ const Booking = () => {
                 numberOfNights={numberOfNights}
                 hotel={hotel}
             />
-            {currentUser && <BookingForm
-                currentUser={currentUser}
-            />}
+            {currentUser && paymentIntentData && (
+                <Elements
+                    stripe={stripePromise}
+                    options={{
+                        clientSecret: paymentIntentData.clientSecret,
+                    }}
+                >
+                    <BookingForm
+                        currentUser={currentUser}
+                        paymentIntent={paymentIntentData}
+                    />
+                </Elements>
+            )}
         </div>
-    )
-}
+    );
+};
 
 export default Booking;

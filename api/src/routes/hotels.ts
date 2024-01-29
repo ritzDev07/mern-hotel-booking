@@ -63,6 +63,19 @@ router.get("/search", async (req: Request, res: Response) => {
 
 });
 
+// Route to fetch hotels sorted by last updated date HOMEPAGE
+router.get("/", async (req: Request, res: Response) => {
+    try {
+        // Fetch hotels sorted by last updated date
+        const hotels = await Hotel.find().sort("-lastUpdated");
+        res.json(hotels);
+        
+    } catch (error) {
+        console.log("error", error);
+        res.status(500).json({ message: "Error fetching hotels" });
+    }
+});
+
 // Route to fetch a specific hotel by ID
 router.get(
     "/:id",

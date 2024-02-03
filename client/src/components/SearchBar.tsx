@@ -1,4 +1,4 @@
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useMemo } from "react";
 import { useSearchContext } from "../contexts/SearchContext";
 import { MdTravelExplore } from "react-icons/md";
 import DatePicker from "react-datepicker";
@@ -11,9 +11,17 @@ const SearchBar = () => {
 
     const [destination, setDestination] = useState<string>(search.destination);
     const [checkIn, setCheckIn] = useState<Date>(search.checkIn);
-    const [checkOut, setCheckOut] = useState<Date>(search.checkOut);
     const [adultCount, setAdultCount] = useState<number>(search.adultCount);
     const [childCount, setChildCount] = useState<number>(search.childCount);
+
+    // Initialize checkOut with checkIn + 1 day
+    const initialCheckOutDate = useMemo(() => {
+        const nextDay = new Date(checkIn);
+        nextDay.setDate(nextDay.getDate() + 1); // Set checkOut date to one day ahead
+        return nextDay;
+    }, [checkIn]);
+    const [checkOut, setCheckOut] = useState<Date>(initialCheckOutDate);
+
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
@@ -35,9 +43,9 @@ const SearchBar = () => {
 
         <form
             onSubmit={handleSubmit}
-            className="text-sm -mt-8 p-4 bg-amber-400 rounded-sm shadow-md grid lg:grid-cols-4 2xl:grid-cols-4 items-center gap-1"
+            className="text-sm -mt-8 p-2 bg-amber-400 rounded-sm shadow-md grid lg:grid-cols-4 2xl:grid-cols-4 items-center gap-1"
         >
-            <div className="flex flex-row items-center flex-1 bg-white p-2">
+            <div className="flex flex-row items-center flex-1 bg-white p-4">
                 <MdTravelExplore size={18} className="mr-2" />
                 <input
                     placeholder="Where are you going?"
@@ -47,11 +55,11 @@ const SearchBar = () => {
                 />
             </div>
 
-            <div className="flex min-w-full bg-white px-2 py-1 gap-2">
+            <div className="flex min-w-full bg-white p-4 gap-2">
                 <label className="items-center flex">
                     Adults:
                     <input
-                        className="w-full p-1 focus:outline-none font-bold"
+                        className="w-full focus:outline-none font-bold"
                         type="number"
                         min={1}
                         max={20}
@@ -62,7 +70,7 @@ const SearchBar = () => {
                 <label className="items-center flex">
                     Children:
                     <input
-                        className="w-full p-1 focus:outline-none font-bold"
+                        className="w-full focus:outline-none font-bold"
                         type="number"
                         min={0}
                         max={20}
@@ -82,8 +90,9 @@ const SearchBar = () => {
                         endDate={checkOut}
                         minDate={minDate}
                         maxDate={maxDate}
-                        placeholderText="Check-in Date"
-                        className="w-full bg-white p-2 focus:outline-none"
+                        placeholderText="Select Check-in Date"
+                        dateFormat="eee, MMM d"
+                        className="w-full bg-white p-4 focus:outline-none"
                         wrapperClassName="w-full"
                     />
                 </div>
@@ -98,7 +107,8 @@ const SearchBar = () => {
                         minDate={minDate}
                         maxDate={maxDate}
                         placeholderText="Check-out Date"
-                        className="w-full bg-white p-2 focus:outline-none"
+                        dateFormat="eee, MMM d"
+                        className="w-full bg-white p-4 focus:outline-none"
                         wrapperClassName="w-full"
                     />
                 </div>
@@ -107,12 +117,10 @@ const SearchBar = () => {
 
             <div className="flex gap-1">
 
-                <button className="w-2/3 rounded-sm bg-blue-600 text-white h-full p-1 font-bold text-lg hover:bg-blue-500">
+                <button className="w-full rounded-sm bordr bg-blue-700 text-white p-3 font-bold text-lg hover:bg-blue-600">
                     Search
                 </button>
-                <button className="w-1/3 rounded-sm bg-red-600 text-white h-full p-1 font-bold text-lg hover:bg-red-500">
-                    Clear
-                </button>
+
 
             </div>
         </form>

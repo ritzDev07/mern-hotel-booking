@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes, } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Link, } from "react-router-dom";
 import Layout from "./layouts/Layout";
 import Register from "./pages/Register";
 import SignIn from "./pages/SignIn";
@@ -11,6 +11,7 @@ import Detail from "./pages/Detail";
 import Booking from "./pages/Booking";
 import MyBookings from "./pages/MyBookings";
 import Home from "./pages/Home";
+import NotFound from "./pages/NotFound";
 
 const App = () => {
 	const { isLoggedIn } = useAppContext();
@@ -50,6 +51,13 @@ const App = () => {
 						<SignIn />
 					</Layout>
 				} />
+
+				<Route
+					path="*"
+					element={
+						<NotFound />
+					}
+				/>
 
 				{isLoggedIn && (
 					<>
@@ -97,7 +105,7 @@ const App = () => {
 					</>
 				)}
 			</Routes>
-		</Router>
+		</Router >
 	)
 }
 

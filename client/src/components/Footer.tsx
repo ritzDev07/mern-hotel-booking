@@ -1,8 +1,8 @@
 
 const Footer = () => {
     return (
-        <div className="bg-green-800 py-10">
-            <div className="container mx-auto flex justify-between items-center">
+        <div className="bg-green-800 py-14 text-xs md:text-lg">
+            <div className="container mx-auto flex justify-between items-center gap-4">
 
                 <span className="text-3xl text-white font-bold tracking-tight">
                     RitzHotel

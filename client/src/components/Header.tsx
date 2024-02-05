@@ -14,18 +14,18 @@ const Header = () => {
                     <Link to='/'>RitzHotel</Link>
                 </span>
 
-                <span className="flex space-x-2">
+                <span className="flex space-x-2 text-xs md:text-lg ">
                     {isLoggedIn ?
                         <>
                             <Link
-                                className="flex items-center text-white px-3 font-bold hover:bg-green-700"
+                                className="flex items-center rounded-sm text-white px-3 font-bold hover:bg-green-700"
                                 to="/my-bookings"
                             >
                                 My Bookings
                             </Link>
 
                             <Link
-                                className="flex items-center text-white px-3 font-bold hover:bg-green-700"
+                                className="flex items-center rounded-sm text-white px-3 font-bold hover:bg-green-700"
                                 to="/my-hotels"
                             >
                                 My Hotels
@@ -34,7 +34,7 @@ const Header = () => {
                         </>
                         :
                         <Link to='/sign-in'
-                            className="flex bg-slate-100 items-center text-green-500 px-3 font-bold hover:bg-gray-100 hover:text-green-600">
+                            className="flex bg-slate-100 items-center rounded-sm text-green-500 px-3 font-bold hover:bg-gray-100 hover:text-green-600">
                             Sign In
                         </Link>
                     }
